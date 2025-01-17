@@ -1,9 +1,9 @@
 beautifulsoup4
-chromedriver-py
-lxml
+requests
 numpy
+chromedriver-py
 pandas
+lxml
 pydantic
 pydantic-settings
-requests
 selenium
