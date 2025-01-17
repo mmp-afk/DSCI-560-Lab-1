@@ -56,33 +56,33 @@ def initialize_driver():
 
 
 def save_html_page(page: BeautifulSoup, save_to: str):
-    logging.info("Extracting the market banner HTML tags...")
+    logging.info("Retrieving the HTML tags for the market banner")
     market_banner = page.find("div", class_="MarketsBanner-marketData").prettify()
 
-    logging.info("Extracting the latest news panel...")
+    logging.info("Getting the latest news panel..")
     response = requests.get(Settings().BASE_URL)
     soup = BeautifulSoup(response.text, "html.parser")
     latest_news = soup.find("ul", class_="LatestNews-list").prettify()
 
-    logging.info("Saving HTML page...")
+    logging.info("Saving HTML")
     # Save the collected data in the raw_data folder
     with open(save_to, "w", encoding="utf-8") as file:
         file.write(str(market_banner))
         file.write("\n\n")
         file.write(str(latest_news))
 
-    logging.info("Successfully saved the HTML file to %s", save_to)
+    logging.info("Successfully saved HTML file to %s", save_to)
 
 
 if __name__ == "__main__":
     settings = Settings()
     try:
-        logging.info("Initializing the Chrome WebDriver...")
+        logging.info("Starting the Chrome WebDriver")
         driver = initialize_driver()
-        logging.info("Getting the CNBC Web Page...")
+        logging.info("Loading the CNBC website")
         driver.get(settings.BASE_URL)
 
-        logging.info("Waiting for the Market Cards rows to be populated...")
+        logging.info("Awaiting the Market Cards rows to be filled")
         WebDriverWait(driver, 60).until(
             EC.visibility_of_element_located((By.CLASS_NAME, "MarketCard-row"))
         )
@@ -91,7 +91,7 @@ if __name__ == "__main__":
         EXTRACTED_HTML_PATH = os.path.join(Path.data_dir, "raw_data", "web_data.html")
         save_html_page(page, EXTRACTED_HTML_PATH)
 
-        logging.info("Printing the first ten lines of HTML file to stdout")
+        logging.info("Printing first ten lines of HTML file to stdout")
         with open(EXTRACTED_HTML_PATH, "r", encoding="utf-8") as f:
             for _ in range(10):
                 print(f.readline().strip())
